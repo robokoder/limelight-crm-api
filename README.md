@@ -5,15 +5,22 @@ A small library providing utility methods to `request` LimeLight CRM API
 
 ## Installation
 
-  npm install limelight-crm-api --save
+```$ npm install limelight-crm-api --save```
 
 ## Usage
+
+### Init LimeLight
+```js
   var LimeLight = require("limelight-crm-api");
   var limelight = new LimeLight({
     url: 'https://www.yourlimelightserver.com/admin/',
     user: 'username',
     pass: 'secretpass'
   });
+```
+### request method
+
+```js
   limelight.request('membership', 'order_view', {
     order_id: 99999
   })
@@ -23,6 +30,7 @@ A small library providing utility methods to `request` LimeLight CRM API
     .catch(function(err) {
       console.error('Error: ', err);
     });
+```
 
 ## Contributing
 
