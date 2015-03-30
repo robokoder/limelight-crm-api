@@ -37,8 +37,6 @@ LimeLightCRM.prototype.request = function(type, method, params) {
           queryParams[property] = params[property];
         }
       }
-    } else {
-      reject(new Error("LimeLight query params missing"));
     }
 
     var options = {
