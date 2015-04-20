@@ -47,7 +47,7 @@ LimeLightCRM.prototype.request = function(type, method, params) {
     }
 
     var options = {
-      url: limelightConfig[credentialsIterator].url + type.toLowerCase() + '.php'
+      url: limelightConfig.url + type.toLowerCase() + '.php'
       ,
       qs: queryParams
     };
