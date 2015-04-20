@@ -36,7 +36,7 @@ function LimeLightCRM(options) {
 LimeLightCRM.prototype.request = function(type, method, params) {
   return new Promise(function (resolve, reject) {
     var queryParams = {
-      username: limelightConfig[credentialsIterator].credentials.user, password: limelightConfig[credentialsIterator].credentials.password, method: method
+      username: limelightConfig.credentials[credentialsIterator].user, password: limelightConfig.credentials[credentialsIterator].password, method: method
     };
     if (params !== undefined && Object.keys(params).length !== 0) {
       for (var property in params) {

@@ -1,6 +1,6 @@
 {
   "name": "limelight-crm-api",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "LimeLight CRM API gateway",
   "main": "index.js",
   "scripts": {
