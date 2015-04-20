@@ -4,7 +4,8 @@
 var Promise = require('bluebird')
   , request = require('request')
   , queryString = require('querystring')
-  , limelightConfig = {}
+  , limelightConfig
+  , credentialsIterator = 0
   ;
 
 
@@ -15,9 +16,15 @@ var Promise = require('bluebird')
  * @pass - your LimeLight API password
  */
 function LimeLightCRM(options) {
-  limelightConfig.LIMELIGHTCRM_BASIC_ADMIN_URL  = options.url;
-  limelightConfig.LIMELIGHTCRM_USERNAME         = options.user;
-  limelightConfig.LIMELIGHTCRM_PASSWORD         = options.pass;
+  if (Array.isArray(options)) {
+    if (options.url !== undefined && options.user !== undefined && options.pass !== undefined) {
+      limelightConfig = options;
+    } else {
+      throw new Error('Expected an array of objects with "url", "user" and "pass" attributes');
+    }
+  } else {
+    throw new Error("Expected an array of objects, got " + (typeof options));
+  }
 }
 
 /**
@@ -29,7 +36,7 @@ function LimeLightCRM(options) {
 LimeLightCRM.prototype.request = function(type, method, params) {
   return new Promise(function (resolve, reject) {
     var queryParams = {
-      username: limelightConfig.LIMELIGHTCRM_USERNAME, password: limelightConfig.LIMELIGHTCRM_PASSWORD, method: method
+      username: limelightConfig[credentialsIterator].user, password: limelightConfig[credentialsIterator].pass, method: method
     };
     if (params !== undefined && Object.keys(params).length !== 0) {
       for (var property in params) {
@@ -40,7 +47,7 @@ LimeLightCRM.prototype.request = function(type, method, params) {
     }
 
     var options = {
-      url: limelightConfig.LIMELIGHTCRM_BASIC_ADMIN_URL + type.toLowerCase() + '.php'
+      url: limelightConfig[credentialsIterator].url + type.toLowerCase() + '.php'
       ,
       qs: queryParams
     };
@@ -48,6 +55,11 @@ LimeLightCRM.prototype.request = function(type, method, params) {
     request.post(options, function (err, httpResponse, body) {
       if (err) {
         reject(err);
+      }
+      if (credentialsIterator < limelightConfig.length) {
+        credentialsIterator++;
+      } else {
+        credentialsIterator = 0;
       }
       resolve(queryString.parse(body));
     });
