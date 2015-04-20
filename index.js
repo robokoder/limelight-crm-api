@@ -16,14 +16,14 @@ var Promise = require('bluebird')
  * @pass - your LimeLight API password
  */
 function LimeLightCRM(options) {
-  if (Array.isArray(options)) {
-    if (options.url !== undefined && options.user !== undefined && options.pass !== undefined) {
+  if (options.url !== undefined && options.credentials !== undefined) {
+    if (Array.isArray(options.credentials)) {
       limelightConfig = options;
     } else {
-      throw new Error('Expected an array of objects with "url", "user" and "pass" attributes');
+      throw new Error("Expected an array of credentials, got " + (typeof options.credentials));
     }
   } else {
-    throw new Error("Expected an array of objects, got " + (typeof options));
+    throw new Error('Expected an array of objects with "url" and "credentials" attributes');
   }
 }
 
@@ -36,7 +36,7 @@ function LimeLightCRM(options) {
 LimeLightCRM.prototype.request = function(type, method, params) {
   return new Promise(function (resolve, reject) {
     var queryParams = {
-      username: limelightConfig[credentialsIterator].user, password: limelightConfig[credentialsIterator].pass, method: method
+      username: limelightConfig[credentialsIterator].credentials.user, password: limelightConfig[credentialsIterator].credentials.password, method: method
     };
     if (params !== undefined && Object.keys(params).length !== 0) {
       for (var property in params) {
